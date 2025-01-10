@@ -78,7 +78,7 @@ jQuery(window).on("load", function () {
 
 jQuery(function () {
   scrollHash();
-  gsap.to('body', { opacity: 1, dulation: 1 });
+  gsap.to('body', { opacity: 1, duration: 1 });
 
   // 画面遷移
   jQuery(document).on('click', 'a:not([href*="#"]):not([target]):not([href*="mailto"]):not([href*="tel"])', function (event) {
@@ -247,4 +247,27 @@ jQuery(function () {
 
     return false;
   });
+
+  // スワイパー
+  jQuery(function ($) {
+    const $mvSwiper = $('.js-mv-swiper');
+  
+    if ($mvSwiper.length > 0) {
+      const mvSwiper = new Swiper('.js-mv-swiper', {
+        loop: true,
+        speed: 2000,
+        effect: 'fade',
+        fadeEffect: {
+          crossFade: true
+        },
+        autoplay: {
+          delay: 4000,
+          disableOnInteraction: false
+        }
+      });
+    }
+  });
+  
+  
+
 });
