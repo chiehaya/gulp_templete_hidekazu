@@ -19,23 +19,20 @@ function isMobile() {
  */
 const wrapSpan = () => {
   const textWrap = document.querySelectorAll('.js-wrapSpan');
-  textWrap.forEach((t) => (
-    t.innerHTML = t.textContent.replace(/\S/g, '<span>$&</span>')
-  ));
-}
+  textWrap.forEach((t) => (t.innerHTML = t.textContent.replace(/\S/g, '<span>$&</span>')));
+};
 
 /**
  * アンカーリンク
-*/
+ */
 function scrollHash() {
   const hash = location.hash;
   if (hash && jQuery(hash).length) {
     const offset = jQuery(hash).offset().top;
-    const scrollto = offset - (("fixed" !== jQuery("#header").css("position")) ? (headerHeight + 20) : 0);
+    const scrollto = offset - ('fixed' !== jQuery('#header').css('position') ? headerHeight + 20 : 0);
     jQuery('html, body').animate({ scrollTop: scrollto }, 500);
   }
 }
-
 
 // /**
 //  * ローディング画面
@@ -47,12 +44,11 @@ function scrollHash() {
 /*-------------------------------------------------------------------
 読み込み時実行
 --------------------------------------------------------------------*/
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener('DOMContentLoaded', function () {
   headerHeight = document.querySelector('.js-header').offsetHeight;
   // wrapSpan();
   // setTimeout('stopload()', 10000);
 });
-
 
 /*-------------------------------------------------------------------
 イベント
@@ -61,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
  * スクロールバーを除いた画面幅の取得
  */
 jQuery(window).on('load resize', function () {
-  let vw = document.body.clientWidth;// スクロールバーを除いた幅を取得
+  let vw = document.body.clientWidth; // スクロールバーを除いた幅を取得
   let vh = window.innerHeight; // アドレスバーを覗いた画面高さ
   headerHeight = document.querySelector('.js-header').offsetHeight;
   document.documentElement.style.setProperty('--vw', `${vw}px`);
@@ -69,10 +65,9 @@ jQuery(window).on('load resize', function () {
   document.documentElement.style.setProperty('--header-height', `${headerHeight}px`);
 });
 
-
 // ローディング判定
-jQuery(window).on("load", function () {
-  jQuery("body").attr("data-loading", "true");
+jQuery(window).on('load', function () {
+  jQuery('body').attr('data-loading', 'true');
   // stopload();
 });
 
@@ -81,61 +76,63 @@ jQuery(function () {
   gsap.to('body', { opacity: 1, duration: 1 });
 
   // 画面遷移
-  jQuery(document).on('click', 'a:not([href*="#"]):not([target]):not([href*="mailto"]):not([href*="tel"])', function (event) {
-    event.preventDefault();
-    const url = jQuery(this).attr('href');
+  jQuery(document).on(
+    'click',
+    'a:not([href*="#"]):not([target]):not([href*="mailto"]):not([href*="tel"])',
+    function (event) {
+      event.preventDefault();
+      const url = jQuery(this).attr('href');
 
-    if ((event.ctrlKey && !event.metaKey) || (!event.ctrlKey && event.metaKey)) {
-      // ctrl(command) + click 時に別ウィンドウで開く処理
-      window.open(url, '_blank');
-      return false;
+      if ((event.ctrlKey && !event.metaKey) || (!event.ctrlKey && event.metaKey)) {
+        // ctrl(command) + click 時に別ウィンドウで開く処理
+        window.open(url, '_blank');
+        return false;
+      }
+
+      if (url !== '') {
+        document.body.classList.add('fadeOut');
+        setTimeout(() => {
+          window.location = url;
+        }, 500);
+      }
     }
-
-    if (url !== '') {
-      document.body.classList.add("fadeOut");
-      setTimeout(() => {
-        window.location = url;
-      }, 500);
-    }
-  });
-
+  );
 
   // スクロール判定
-  jQuery(window).on("scroll", function () {
+  jQuery(window).on('scroll', function () {
     let scrollTop = jQuery(this).scrollTop();
     let windowHeight = jQuery(this).height();
     let documentHeight = jQuery(document).height();
 
     if (100 < scrollTop) {
-      jQuery("body").attr("data-scroll", "true");
+      jQuery('body').attr('data-scroll', 'true');
     } else {
-      jQuery("body").attr("data-scroll", "false");
+      jQuery('body').attr('data-scroll', 'false');
     }
 
     if (documentHeight - (windowHeight + scrollTop) <= 0) {
-      jQuery("body").attr("data-scroll-bottom", "true");
+      jQuery('body').attr('data-scroll-bottom', 'true');
     } else {
-      jQuery("body").attr("data-scroll-bottom", "false");
+      jQuery('body').attr('data-scroll-bottom', 'false');
     }
 
     /**
      * トップに戻るボタン
      */
     const totop = jQuery('.js-totop');
-    const totopTarget = jQuery(`.${totop.data("target")}`);
+    const totopTarget = jQuery(`.${totop.data('target')}`);
     if ((totopTarget.length ? totopTarget.innerHeight() : headerHeight) < scrollTop) {
       totop.addClass('is-active');
     } else {
       totop.removeClass('is-active');
     }
-
   });
 
   /* ドロワー */
-  jQuery(".js-drawer").on("click", function (event) {
+  jQuery('.js-drawer').on('click', function (event) {
     event.preventDefault();
-    const ariaControls = jQuery(this).attr("aria-controls");
-    const addClass = 'is-opened'
+    const ariaControls = jQuery(this).attr('aria-controls');
+    const addClass = 'is-opened';
 
     if (jQuery(`#${ariaControls}`).hasClass(addClass)) {
       jQuery(`#${ariaControls}`).removeClass(addClass);
@@ -144,7 +141,7 @@ jQuery(function () {
     }
 
     jQuery(`[aria-controls=${ariaControls}]`).each(function () {
-      jQuery(this).attr("aria-expanded", (jQuery(`#${ariaControls}`).hasClass(addClass) ? 'false' : 'true'));
+      jQuery(this).attr('aria-expanded', jQuery(`#${ariaControls}`).hasClass(addClass) ? 'false' : 'true');
       if (jQuery(`#${ariaControls}`).hasClass(addClass)) {
         jQuery(this).addClass(addClass);
       } else {
@@ -153,7 +150,9 @@ jQuery(function () {
     });
 
     // ドロワー開時にbody要素がスクロールしないように
-    (jQuery(`#${ariaControls}`).hasClass(addClass) ? jQuery('body').addClass('u-overflowHidden') : jQuery('body').removeClass('u-overflowHidden'));
+    jQuery(`#${ariaControls}`).hasClass(addClass)
+      ? jQuery('body').addClass('u-overflowHidden')
+      : jQuery('body').removeClass('u-overflowHidden');
 
     return false;
   });
@@ -163,8 +162,8 @@ jQuery(function () {
    */
   jQuery('#drawer-content1 a[href*="#"]').on('click', function (event) {
     const currentUrl = location.protocol + '//' + location.host + location.pathname; // 現在のURL
-    const href = jQuery(this).prop("href");
-    const hrefUrl = href.split('#')[0];   // リンク先のURL
+    const href = jQuery(this).prop('href');
+    const hrefUrl = href.split('#')[0]; // リンク先のURL
 
     if (currentUrl == hrefUrl) {
       jQuery('.for-drawer').removeClass('is-opened');
@@ -179,7 +178,7 @@ jQuery(function () {
     const $header = jQuery('.js-header');
     if ($header.length) {
       const target = jQuery(`.${jQuery($header).data('target')}`);
-      const targetHeight = (target.length ? target.innerHeight() : headerHeight * 1.1);
+      const targetHeight = target.length ? target.innerHeight() : headerHeight * 1.1;
       let position = jQuery(this).scrollTop();
       if (position > targetHeight) {
         $header.addClass('is-fixed');
@@ -190,42 +189,49 @@ jQuery(function () {
     // }
   });
 
-
   /* スムーススクロール */
-  jQuery(document).on('click', 'a[href*="#"]:not(".js-tabIndex, .js-modal, .js-accordion, .toc_toggle a")', function (e) {
-    const currentUrl = location.protocol + '//' + location.host + location.pathname; // 現在のURL
-    const href = jQuery(this).prop("href");
-    const hrefUrl = href.split('#')[0];   // リンク先のURL
-    // let target = $(this.hash);
-    // if (!target.length) return;
+  jQuery(document).on(
+    'click',
+    'a[href*="#"]:not(".js-tabIndex, .js-modal, .js-accordion, .toc_toggle a")',
+    function (e) {
+      const currentUrl = location.protocol + '//' + location.host + location.pathname; // 現在のURL
+      const href = jQuery(this).prop('href');
+      const hrefUrl = href.split('#')[0]; // リンク先のURL
+      // let target = $(this.hash);
+      // if (!target.length) return;
 
-    if (currentUrl == hrefUrl) {
-      e.preventDefault();
-      let id = '#' + href.split('#')[1];  // リンク先のアンカー
-      let speed = 300;
-      let target = jQuery("#" == id ? "html" : id);
-      let position = target.offset().top - headerHeight;
-      if (("fixed" !== jQuery("#header").css("position")) && ("sticky" !== jQuery("#header").css("position"))) {
-        position = target.offset().top;
+      if (currentUrl == hrefUrl) {
+        e.preventDefault();
+        let id = '#' + href.split('#')[1]; // リンク先のアンカー
+        let speed = 300;
+        let target = jQuery('#' == id ? 'html' : id);
+        let position = target.offset().top - headerHeight;
+        if ('fixed' !== jQuery('#header').css('position') && 'sticky' !== jQuery('#header').css('position')) {
+          position = target.offset().top;
+        }
+        if (0 > position) {
+          position = 0;
+        }
+        jQuery('html, body').animate(
+          {
+            scrollTop: position,
+          },
+          speed
+        );
+        jQuery(this).blur();
+        // return false;
       }
-      if (0 > position) {
-        position = 0;
-      }
-      jQuery("html, body").animate({
-        scrollTop: position
-      }, speed);
-      jQuery(this).blur();
-      // return false;
     }
-  });
+  );
 
   /* 電話リンク */
   let $ua = navigator.userAgent;
-  if ($ua.indexOf("iPhone") < 0 && $ua.indexOf("Android") < 0) {  // PCのとき
+  if ($ua.indexOf('iPhone') < 0 && $ua.indexOf('Android') < 0) {
+    // PCのとき
     jQuery('a[href^="tel:"]') // 電話リンク
-      .css("cursor", "default") // カーソルをポインターにしない
-      .css('pointer-events', 'none')  // ホバーなども動作しない
-      .on("click", function (e) {
+      .css('cursor', 'default') // カーソルをポインターにしない
+      .css('pointer-events', 'none') // ホバーなども動作しない
+      .on('click', function (e) {
         e.preventDefault();
       });
   }
@@ -250,24 +256,21 @@ jQuery(function () {
 
   // スワイパー
   jQuery(function ($) {
-    const $mvSwiper = $('.js-mv-swiper');
-  
+    const $mvSwiper = $('.js-swiper');
+
     if ($mvSwiper.length > 0) {
-      const mvSwiper = new Swiper('.js-mv-swiper', {
+      const mvSwiper = new Swiper('.js-swiper', {
         loop: true,
         speed: 2000,
         effect: 'fade',
         fadeEffect: {
-          crossFade: true
+          crossFade: true,
         },
         autoplay: {
           delay: 4000,
-          disableOnInteraction: false
-        }
+          disableOnInteraction: false,
+        },
       });
     }
   });
-  
-  
-
 });
