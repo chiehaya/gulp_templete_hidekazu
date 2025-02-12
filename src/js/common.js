@@ -76,27 +76,12 @@ jQuery(function () {
   gsap.to('body', { opacity: 1, duration: 1 });
 
   // 画面遷移
-  jQuery(document).on(
-    'click',
-    'a:not([href*="#"]):not([target]):not([href*="mailto"]):not([href*="tel"])',
-    function (event) {
-      event.preventDefault();
-      const url = jQuery(this).attr('href');
-
-      if ((event.ctrlKey && !event.metaKey) || (!event.ctrlKey && event.metaKey)) {
-        // ctrl(command) + click 時に別ウィンドウで開く処理
-        window.open(url, '_blank');
-        return false;
-      }
-
-      if (url !== '') {
-        document.body.classList.add('fadeOut');
-        setTimeout(() => {
-          window.location = url;
-        }, 500);
-      }
-    }
-  );
+  window.addEventListener('beforeunload', function (e) {
+    document.body.classList.add("fadeOut");
+    setTimeout(() => {
+      window.location = url;
+    }, 500);
+  });
 
   // スクロール判定
   jQuery(window).on('scroll', function () {
